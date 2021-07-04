@@ -9,6 +9,7 @@ public interface LeaveManagementService {
     Leaves createLeave(Leaves leaves);
     LeaveResponse saveResponse(LeaveResponse leaveResponse);
     TotalLeaves addLeaves(TotalLeaves totalLeaves);
+    Leaves getLeaves(Long id);
 
 
 }

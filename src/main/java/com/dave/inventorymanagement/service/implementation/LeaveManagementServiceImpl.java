@@ -10,6 +10,8 @@ import com.dave.inventorymanagement.service.service_manager.LeaveManagementServi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LeaveManagementServiceImpl implements LeaveManagementService {
 
@@ -35,5 +37,19 @@ public class LeaveManagementServiceImpl implements LeaveManagementService {
     public TotalLeaves addLeaves(TotalLeaves totalLeaves) {
         return totalLeavesRepository.save(totalLeaves);
     }
+
+    @Override
+    public Leaves getLeaves(Long id) {
+        System.out.println("-*-*-*-*-*"+leavesRepository.getById(id).getReason() );
+        return leavesRepository.getById(id);
+    }
+
+    public List<Leaves> getAllLeaveRequest(){
+
+        return leavesRepository.findAll();
+
+    }
+
+
 
 }

@@ -37,10 +37,17 @@ public class LeaveManagement {
         return leaveManagementService.saveResponse(leaveResponse);
     }
 
+    @RequestMapping(value = "/api/v1/leave_management/leaveDetails", method = RequestMethod.GET)
+    public Leaves findLeaveDetails(Long id){
+        return leaveManagementService.getLeaves(id);
+    }
+
+
+
     //Web Controller
     @GetMapping("/")
     public ModelAndView index(Model model){
-        List<Leaves> leavesList = new ArrayList<>();
+        List<Leaves> leavesList = leaveManagementService.getAllLeaveRequest();
         Map<String, Object> params = new HashMap<>();
         params.put("leavesList", leavesList);
 
