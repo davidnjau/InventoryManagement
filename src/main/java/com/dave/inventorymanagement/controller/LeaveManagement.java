@@ -6,10 +6,15 @@ import com.dave.inventorymanagement.entity.leave_manegement.TotalLeaves;
 import com.dave.inventorymanagement.service.implementation.LeaveManagementServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class LeaveManagement {
@@ -30,6 +35,25 @@ public class LeaveManagement {
     @RequestMapping(value = "/api/v1/leave_management/save_leave_response", method = RequestMethod.POST)
     public LeaveResponse createLeaveResponse(@RequestBody LeaveResponse leaveResponse) {
         return leaveManagementService.saveResponse(leaveResponse);
+    }
+
+    //Web Controller
+    @GetMapping("/")
+    public ModelAndView index(Model model){
+        List<Leaves> leavesList = new ArrayList<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("leavesList", leavesList);
+
+        return new ModelAndView("index",params );
+    }
+
+    @GetMapping("/leave_requests")
+    public ModelAndView showRequests(){
+        List<Leaves> leavesList = new ArrayList<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("leavesList", leavesList);
+
+        return new ModelAndView("leave_requests",params );
     }
 
 }
