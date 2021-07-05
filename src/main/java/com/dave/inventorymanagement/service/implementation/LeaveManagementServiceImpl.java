@@ -4,15 +4,14 @@ import com.dave.inventorymanagement.entity.leave_manegement.LeaveResponse;
 import com.dave.inventorymanagement.entity.leave_manegement.Leaves;
 import com.dave.inventorymanagement.entity.leave_manegement.TotalLeaves;
 import com.dave.inventorymanagement.helper_class.LeaveDetails;
-import com.dave.inventorymanagement.repository.LeaveResponsesRepository;
-import com.dave.inventorymanagement.repository.LeavesRepository;
-import com.dave.inventorymanagement.repository.TotalLeavesRepository;
+import com.dave.inventorymanagement.repository.leave_management.LeaveResponsesRepository;
+import com.dave.inventorymanagement.repository.leave_management.LeavesRepository;
+import com.dave.inventorymanagement.repository.leave_management.TotalLeavesRepository;
 import com.dave.inventorymanagement.service.service_manager.LeaveManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

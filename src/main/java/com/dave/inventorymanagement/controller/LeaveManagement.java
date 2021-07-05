@@ -5,11 +5,7 @@ import com.dave.inventorymanagement.entity.leave_manegement.Leaves;
 import com.dave.inventorymanagement.entity.leave_manegement.TotalLeaves;
 import com.dave.inventorymanagement.helper_class.LeaveDetails;
 import com.dave.inventorymanagement.service.implementation.LeaveManagementServiceImpl;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -47,12 +43,12 @@ public class LeaveManagement {
 
 
     //Web Controller
-    @GetMapping("/")
+    @GetMapping("/all_leaves_requests")
     public ModelAndView index(@RequestParam(defaultValue = "0") int pageNo){
 
         int pageSize = 5;
 
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("leave_management/index");
         List<Leaves> leavesList = leaveManagementService.getAllLeaveRequest(pageNo, pageSize);
         List<Leaves> leavesListNoPage = leaveManagementService.getAllLeaveRequestWithoutPagination();
 
@@ -72,7 +68,7 @@ public class LeaveManagement {
         Map<String, Object> params = new HashMap<>();
         params.put("leavesList", leavesList);
 
-        return new ModelAndView("leave_requests",params );
+        return new ModelAndView("leave_management/leave_requests",params );
     }
 
     @GetMapping("/make_leave_request")
@@ -81,7 +77,7 @@ public class LeaveManagement {
         Map<String, Object> params = new HashMap<>();
         params.put("leavesList", leavesList);
 
-        return new ModelAndView("make_leave_request",params );
+        return new ModelAndView("leave_management/make_leave_request",params );
     }
 
 }
