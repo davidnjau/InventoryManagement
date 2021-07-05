@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/make_leave_request.css}" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap CRUD Data Table for Database with Modal Form</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/webjars/jquery/2.2.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            var date_input=$('input[name="date"]'); //our date input has the name "date"
+            var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+            var options={
+                format: 'dd/mm/yyyy',
+                container: container,
+                todayHighlight: true,
+                autoclose: true,
+                orientation: "bottom right",
+            };
+            date_input.datepicker(options);
+        })
+    </script>
+
+
+</head>
+<body>
+
+<div class="card-body">
+
+    <section class="get-in-touch">
+        <h1 class="title">Make Leave Request</h1>
+        <form class="contact-form row" method="post" action="#">
+            <div class="form-field col-lg-12">
+                <input id="reason" class="input-text js-input"  type="text" required>
+                <label class="label" for="reason">Leave Reason</label>
+            </div>
+            <div class="form-field col-lg-6 ">
+                <label class="label" for="from_date">Select Start Date</label>
+                <input id="from_date" class="input-text js-input" name="date" placeholder="" type="text"/>
+
+            </div>
+
+            <div class="form-field col-lg-6 ">
+
+                <label class="label" for="to_date">Select Final Date</label>
+                <input id="to_date" class="input-text js-input" name="date" placeholder="" type="text"/>
+
+            </div>
+            <div class="form-field col-lg-12">
+                <button class="submit-btn" type="button" id="getData" value="getData" onclick="sam()">Submit</button>
+                <div id="snackbar">Data has been saved successfully.</div>
+
+                <script>
+                    function sam() {
+                        var reason = document.getElementById("reason").value;
+                        var from_date = document.getElementById("from_date").value;
+                        var to_date = document.getElementById("to_date").value;
+                        console.log(reason,from_date,to_date)
+                        // convert to JSON
+                        var dataJson = {
+                            "reason":reason,
+                            "from_date":from_date,
+                            "to_date":to_date,
+                            "user_id":"123456",
+                        };
+
+                        var postData = JSON.stringify(dataJson);
+                        //
+                        console.log(postData)
+
+                        // post data
+                        $.ajax({
+                            type: 'POST',
+                            url: 'http://192.168.81.34:8084/api/v1/leave_management/create_request',
+                            data: postData, // or JSON.stringify ({name: 'jonas'}),
+                            success: function(result) {
+                                alert('success: ' + "");
+
+                                // $('#part_name').val('');
+                                // $('#part_description').val('');
+
+                                alertMessage()
+
+                            },
+                            error:function (error) {
+                                alert('error: ' + error);
+
+                            },
+                            contentType: "application/json",
+                            dataType: 'json'
+                        });
+
+                    }
+                    function alertMessage() {
+                        var x = document.getElementById("snackbar");
+
+                        // Add the "show" class to DIV
+                        x.className = "show";
+
+                        // location.reload();
+                        // After 3 seconds, remove the show class from DIV
+                        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+                    }
+
+                    function getData(){
+                        var reason = document.getElementById("reason").value;
+                        var from_date = document.getElementById("from_date").value;
+                        var to_date = document.getElementById("to_date").value;
+                        console.log("test")
+                        alert(reason)
+
+                        // var dataJson = {
+                        //     "reason":reason,
+                        //     "from_date":from_date,
+                        //     "to_date":to_date,
+                        //     "user_id":"123456",
+                        // };
+                        //
+                        // var postData = JSON.stringify(dataJson);
+                        //
+                        // $.ajax({
+                        //     type: 'POST',
+                        //     url: 'http://192.168.81.34:8084/create_request',
+                        //     data: postData, // or JSON.stringify ({name: 'jonas'}),
+                        //     success: function(result) {
+                        //         // alert('success: ' + "");
+                        //
+                        //         $('#part_name').val('');
+                        //         $('#part_description').val('');
+                        //
+                        //         alertMessage()
+                        //
+                        //     },
+                        //     error:function (error) {
+                        //         alert('error: ' + error.value);
+                        //
+                        //     },
+                        //     contentType: "application/json",
+                        //     dataType: 'json'
+                        // });
+                    }
+
+
+
+                </script>
+
+                <!--                <input class="submit-btn" type="submit" value="Submit">-->
+            </div>
+
+        </form>
+    </section>
+
+</div>
+
+
+
+</body>
+</html>

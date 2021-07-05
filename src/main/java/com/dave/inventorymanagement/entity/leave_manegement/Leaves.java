@@ -18,10 +18,10 @@ public class Leaves {
     private String reason;
 
     @Column
-    private Date from_date;
+    private String  from_date;
 
     @Column
-    private Date to_date;
+    private String to_date;
 
     @CreationTimestamp
     private Date created_at;
@@ -35,7 +35,7 @@ public class Leaves {
     public Leaves() {
     }
 
-    public Leaves(String reason, Date from_date, Date to_date, String user_id) {
+    public Leaves(String reason, String from_date, String to_date, String user_id) {
         this.reason = reason;
         this.from_date = from_date;
         this.to_date = to_date;
@@ -58,19 +58,19 @@ public class Leaves {
         this.reason = reason;
     }
 
-    public Date getFrom_date() {
+    public String getFrom_date() {
         return from_date;
     }
 
-    public void setFrom_date(Date from_date) {
+    public void setFrom_date(String from_date) {
         this.from_date = from_date;
     }
 
-    public Date getTo_date() {
+    public String getTo_date() {
         return to_date;
     }
 
-    public void setTo_date(Date to_date) {
+    public void setTo_date(String to_date) {
         this.to_date = to_date;
     }
 

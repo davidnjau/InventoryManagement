@@ -3,7 +3,9 @@ package com.dave.inventorymanagement.controller;
 import com.dave.inventorymanagement.entity.leave_manegement.LeaveResponse;
 import com.dave.inventorymanagement.entity.leave_manegement.Leaves;
 import com.dave.inventorymanagement.entity.leave_manegement.TotalLeaves;
+import com.dave.inventorymanagement.helper_class.LeaveDetails;
 import com.dave.inventorymanagement.service.implementation.LeaveManagementServiceImpl;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,21 +39,31 @@ public class LeaveManagement {
         return leaveManagementService.saveResponse(leaveResponse);
     }
 
-    @RequestMapping(value = "/api/v1/leave_management/leaveDetails", method = RequestMethod.GET)
-    public Leaves findLeaveDetails(Long id){
-        return leaveManagementService.getLeaves(id);
+    @RequestMapping(value = "/api/v1/leave_management/leaveDetails/{leave_id}", method = RequestMethod.GET)
+    public LeaveDetails findLeaveDetails(@PathVariable("leave_id") Long leave_id){
+        return leaveManagementService.getLeaves(leave_id);
     }
 
 
 
     //Web Controller
     @GetMapping("/")
-    public ModelAndView index(Model model){
-        List<Leaves> leavesList = leaveManagementService.getAllLeaveRequest();
-        Map<String, Object> params = new HashMap<>();
-        params.put("leavesList", leavesList);
+    public ModelAndView index(@RequestParam(defaultValue = "0") int pageNo){
 
-        return new ModelAndView("index",params );
+        int pageSize = 5;
+
+        ModelAndView modelAndView = new ModelAndView("index");
+        List<Leaves> leavesList = leaveManagementService.getAllLeaveRequest(pageNo, pageSize);
+        List<Leaves> leavesListNoPage = leaveManagementService.getAllLeaveRequestWithoutPagination();
+
+        int totalPages = leavesListNoPage.size() / pageSize;
+
+        modelAndView.addObject("leavesList", leavesList);
+        modelAndView.addObject("currentPage", totalPages);
+        modelAndView.addObject("totalPages", totalPages);
+        modelAndView.addObject("totalItems", leavesListNoPage.size());
+
+        return modelAndView;
     }
 
     @GetMapping("/leave_requests")
@@ -61,6 +73,15 @@ public class LeaveManagement {
         params.put("leavesList", leavesList);
 
         return new ModelAndView("leave_requests",params );
+    }
+
+    @GetMapping("/make_leave_request")
+    public ModelAndView makeRequests(){
+        List<Leaves> leavesList = new ArrayList<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("leavesList", leavesList);
+
+        return new ModelAndView("make_leave_request",params );
     }
 
 }
