@@ -18,10 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service(value = "userSenderService")
 public class UserSenderServiceImpl implements UserDetailsService, UserSenderService {
@@ -37,12 +34,12 @@ public class UserSenderServiceImpl implements UserDetailsService, UserSenderServ
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        UserSender user = userSenderDao.findUserSenderByUserName(userName);
+        UserSender user = userSenderDao.findUserSenderByUsername(userName);
         if (user == null){
             throw new UsernameNotFoundException("Invalid username or password");
         }
 
-        return new User(user.getUserName(), user.getPassword(), getAuthority(user));
+        return new User(user.getusername(), user.getPassword(), getAuthority(user));
     }
 
     private Set<SimpleGrantedAuthority> getAuthority(UserSender user) {
@@ -61,19 +58,19 @@ public class UserSenderServiceImpl implements UserDetailsService, UserSenderServ
 
     @Override
     public UserSender findUserByUsername(String username) {
-        return userSenderDao.findUserSenderByUserName(username);
+        return userSenderDao.findUserSenderByUsername(username);
     }
 
     @Override
-    public ResponseEntity<?> saveUser(UserSender user) {
+    public Map<String, Object> saveUser(UserSender user) {
 
-        boolean isUserUsername = userSenderDao.existsByUserName(user.getUserName());
+        Map<String, Object> stringMap = new HashMap<>();
+
+        boolean isUserUsername = userSenderDao.existsByUsername(user.getusername());
         String message = "";
         if (!isUserUsername){
 
-            System.out.println("-*-*-*-*1"+ user.getPassword());
-            System.out.println("-*-*-*-*2"+ user.getUserName());
-            System.out.println("-*-*-*-*3"+ user.getEmailAddress());
+
             //Add user
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
 
@@ -81,7 +78,7 @@ public class UserSenderServiceImpl implements UserDetailsService, UserSenderServ
             Set<Role> roleSet = new HashSet<>();
             roleSet.add(role);
 
-            if(user.getEmailAddress().split("@")[1].equals("admin.edu")){
+            if(user.getEmail_address().split("@")[1].equals("admin.edu")){
                 role = roleService.findByName("ADMIN");
                 roleSet.add(role);
             }
@@ -89,13 +86,17 @@ public class UserSenderServiceImpl implements UserDetailsService, UserSenderServ
             user.setRoles(roleSet);
             userSenderDao.save(user);
             message = "User created successfully.";
-            return new ResponseEntity<>(new UsersDetails(message), HttpStatus.CREATED);
+
+            //            return new ResponseEntity<>(new UsersDetails(message), HttpStatus.CREATED);
 
         }else {
             message = "User exists with that username. Please use another username.";
 
-            return new ResponseEntity<>(new UsersDetails(message), HttpStatus.BAD_REQUEST);
+//            return new ResponseEntity<>(new UsersDetails(message), HttpStatus.BAD_REQUEST);
         }
+        stringMap.put("details", message);
+
+        return stringMap;
 
 
     }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserSenderDao extends CrudRepository<UserSender, Long> {
 
-    UserSender findUserSenderByUserName(String username);
-    Boolean existsByUserName(String username);
+    UserSender findUserSenderByUsername(String username);
+    Boolean existsByUsername(String username);
 
 
 

@@ -6,6 +6,8 @@ import com.dave.inventorymanagement.helper_class.LoginUser;
 import com.dave.inventorymanagement.service.service_manager.UserSenderService;
 import com.example.smsmanager.responses.DetailsData;
 import com.example.smsmanager.responses.LoginDetails;
+import com.example.smsmanager.responses.LoginError;
+import com.example.smsmanager.responses.UsersDetails;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +20,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -37,27 +42,44 @@ public class UsersControllers {
     private TokenProvider jwtTokenUtil;
 
     @RequestMapping(value = "/api/v1/auth/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody UserSender user){
+    public Map<String, Object> saveUser(@RequestBody UserSender user){
+
         return userSenderService.saveUser(user);
+
     }
 
     @RequestMapping(value = "/api/v1/auth/login", method = RequestMethod.POST)
-    public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser) throws AuthenticationException {
+    public Map<String, Object> generateToken(@RequestBody LoginUser loginUser) {
 
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginUser.getUsername(),
-                        loginUser.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String token = jwtTokenUtil.generateToken(authentication);
+        Map<String, Object> response = new HashMap<>();
 
-        String userId = String.valueOf(userSenderService.findUserByUsername(loginUser.getUsername()).getId());
-        String username = loginUser.getUsername();
-        String hashedAccessToken = DigestUtils.sha256Hex(userId + username);
+        try{
 
-        return ResponseEntity.ok(new LoginDetails(new DetailsData(hashedAccessToken, TOKEN_VALIDITY, "Bearer", token)));
+            final Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginUser.getUsername(),
+                            loginUser.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            final String token = jwtTokenUtil.generateToken(authentication);
+
+            String userId = String.valueOf(userSenderService.findUserByUsername(loginUser.getUsername()).getId());
+            String username = loginUser.getUsername();
+            String hashedAccessToken = DigestUtils.sha256Hex(userId + username);
+
+            DetailsData detailsData = new DetailsData(hashedAccessToken, TOKEN_VALIDITY, "Bearer", token);
+
+            response.put("details", detailsData);
+
+
+        }catch (Exception e){
+            System.out.println("-*-*-*-*"+e.getMessage());
+            LoginError details = new LoginError("Wrong credentials. Please try again.");
+            response.put("details", details);
+        }
+
+        return response;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

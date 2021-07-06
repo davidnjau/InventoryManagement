@@ -27,12 +27,12 @@ public class UserSender {
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
 
-    private String userName;
-    private String emailAddress;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String profilePhoto;
+    private String username;
+
+    private String email_address;
+    private String first_name;
+    private String last_name;
+    private String phone_number;
     private String password;
 
     @CreationTimestamp
@@ -61,13 +61,12 @@ public class UserSender {
     public UserSender() {
     }
 
-    public UserSender(String userName, String emailAddress, String firstName, String lastName, String phoneNumber, String profilePhoto, String password) {
-        this.userName = userName;
-        this.emailAddress = emailAddress;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.profilePhoto = profilePhoto;
+    public UserSender(String username, String email_address, String first_name, String last_name, String phone_number, String password) {
+        this.username = username;
+        this.email_address = email_address;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.phone_number = phone_number;
         this.password = password;
     }
 
@@ -79,52 +78,44 @@ public class UserSender {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getusername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setusername(String username) {
+        this.username = username;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail_address() {
+        return email_address;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmail_address(String email_address) {
+        this.email_address = email_address;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone_number() {
+        return phone_number;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getProfilePhoto() {
-        return profilePhoto;
-    }
-
-    public void setProfilePhoto(String profilePhoto) {
-        this.profilePhoto = profilePhoto;
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
     public String getPassword() {
